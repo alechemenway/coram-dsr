@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import {
   CheckCircle,
@@ -453,7 +454,8 @@ function TeamCard({ person, isCoram }) {
 // MAIN PAGE COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export default function DigitalSalesRoom({ params }) {
+export default function DigitalSalesRoom() {
+  const params = useParams();
   const [dsr, setDsr] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -464,6 +466,7 @@ export default function DigitalSalesRoom({ params }) {
     const fetchDSR = async () => {
       try {
         setLoading(true);
+        if (!supabase) { setError("Configuration error."); return; }
         const { data, error: fetchError } = await supabase
           .from("digital_sales_rooms")
           .select("*")
